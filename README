@@ -1,0 +1,120 @@
+Description
+===========
+
+This project contains the means to build the program smiv.
+
+Smiv (SMIles Viewer) is a simple program that allows the user to
+display the contents of a structure file in 2D and match SMARTS
+patterns to them.  The intended use is to assist in the development of
+SMARTS patterns. To that end, SMARTS can be input from file or by
+picking atoms from a molecule in a dialog.  When matched against the
+molecules, the set is divided into 2 display panels, with molecules
+that matched the selected SMARTS (1 or more at a time) in the left
+panel, with the matches highlighted by colour, and those that didn't
+match on the right.
+
+Smiv can also show a table of data, read from a CSV or tab-separated
+file, linked to the panel displays so that you can keep track of
+properties of molecules as you look at them.  It's very primitive, but
+possibly of use.
+
+Usage
+=====
+
+Hopefully it'll be fairly self-explanatory.  There are a few
+command-line options that can be revealed either by running with the
+--help option, or from the Help->About box.
+
+SMARTS are matched using the SMARTS->Match menu option, or Ctrl-M.
+All definitions currently available are presented in a dialog. You can
+select those of interest with normal extended selection rules.  When
+matched, two independent panels are made for the hits and non-hits.
+Atoms that matched a SMARTS are coloured, with the colour giving the
+number of times an atom was matched, in the order Red, Orange, Yellow,
+Green, Blue, Purple for once, twice...many.  Further matching can be
+carried out, and subsequent queries will only be done on the contents
+of the left panel (if there's only 1 panel, it's the left one, the
+right one comes and goes).  So if you want to find the molecules that
+match SMARTS1 and SMARTS2 and SMARTS3, you would do the match with
+SMARTS1, then SMARTS2 and then SMARTS3 in sequence.  At any point, you
+can save a list with Molecules->Lists->New and the contents of the
+currently selected panel (shown by the checkbox on the top left of the
+panel) will be remembered. These lists can be recalled using the same
+menu.
+
+When using the SMARTS->'Interactive Pick' option, the currently
+displayed molecule will shown in a dialog.  Pick the atoms you're
+interested in, and they'll be turned into a SMARTS pattern. This is
+done by extracting the atoms from a copy of the original molecule, and
+is generally mostly successful.  Something resembling it will be
+drawn in the right panel of the dialog.  You have to be quite precise
+with the atom picking, and it's a good idea to have the control key
+down as you pick, so as to avoid unnecessary swearing.  You can pick
+multiple atoms without the control key down, but if you miss an atom
+it clears the selection, which is all too easy to do.
+
+SMARTS File Format
+==================
+
+The SMARTS file format is a bit weird, as you might expect of
+something invented by Pete Kenny.  There's an example, hbond.smt, in
+the test_dir.  As well as demonstrating the format, it's potentially
+of use in itself being his best guess of what h-bond donors and
+acceptors look like.  Each line that isn't a comment has 4 fields,
+space- or tab-separated.  The first field is a label, the second is
+the SMARTS pattern, the third is always a 1 (and its purpose is
+shrouding in mystery) and the fourth is either a 1 or 0, and defines
+whether the SMARTS is a final definition (1) or what Daylight used to
+call a vector binding, and we might these days wall a macro (0).  Only
+final definitions (with a 1 in the fourth field) will be offered for
+matching by smiv.  Final definitions can also be used as macros.
+
+Building the program
+====================
+
+Requires: a recent version of OEChem, a relatively recent version of
+Boost (1.55 and 1.60 are known to work).  You will also need Qt
+(version >5.2) and Cairo. The qmake from an appropriate Qt must be
+in your path.
+
+To build it, use the CMakeLists.txt file in the src directory. It
+requires the following environment variable to point to a relevant
+place:
+
+OE_DIR - the top level of an OEChem distribution
+
+Then cd to src and do something like:
+     mkdir dev-build
+     cd dev-build
+     cmake -DCMAKE\_BUILD\_TYPE=DEBUG ..
+     make
+
+If all goes to plan, this will make a directory src/../exe_DEBUG with the
+executables in it. These will have debugging information in them.
+
+For a release version:
+    mkdir prod-build
+    cd prod-build
+    cmake -DCMAKE\_BUILD\_TYPE=RELEASE ..
+    make
+
+and you'll get stuff in src/../exe_RELEASE which should have full
+compiler optimisation applied.
+
+If you're not wanting to use the system-supplied Boost distribution in
+/usr/include then set BOOST_ROOT to point to the location of a recent
+(>1.48) build of the Boost libraries.  On my Centos 6.5 machine, the
+system boost is 1.41 which isn't good enough. You will also probably
+need to use '-DBoost\_NO\_BOOST\_CMAKE=TRUE' when running cmake:
+
+cmake -DCMAKE\_BUILD\_TYPE=RELEASE -DBoost\_NO\_BOOST\_CMAKE=TRUE ..
+
+These instructions have only been tested in Centos 6 and Ubuntu 14.0
+Linux systems.  I have no experience of using them on Windows of OSX,
+and no means of doing so.
+
+David Cosgrove
+AstraZeneca
+12th February 2016
+
+davidacosgroveaz@gmail.com
