@@ -63,7 +63,7 @@ of use in itself being his best guess of what h-bond donors and
 acceptors look like.  Each line that isn't a comment has 4 fields,
 space- or tab-separated.  The first field is a label, the second is
 the SMARTS pattern, the third is always a 1 (and its purpose is
-shrouding in mystery) and the fourth is either a 1 or 0, and defines
+shrouded in mystery) and the fourth is either a 1 or 0, and defines
 whether the SMARTS is a final definition (1) or what Daylight used to
 call a vector binding, and we might these days wall a macro (0).  Only
 final definitions (with a 1 in the fourth field) will be offered for
