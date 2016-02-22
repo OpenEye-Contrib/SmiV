@@ -58,7 +58,7 @@ void SmiVPanel::add_data( const vector<pSmiVRec> &new_recs ) {
 }
 
 // ****************************************************************************
-void SmiVPanel::set_subsearches( const vector<pair<shared_ptr<OESubSearch>,string> > &ss ) {
+void SmiVPanel::set_subsearches( const vector<pair<boost::shared_ptr<OESubSearch>,string> > &ss ) {
 
   sub_searches_ = ss;
   colour_atoms();

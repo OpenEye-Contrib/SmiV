@@ -1025,7 +1025,7 @@ void SmiV::do_smarts_matching() {
     return;
   }
 
-  vector<pair<shared_ptr<OESubSearch>,string> > sub_searches;
+  vector<pair<boost::shared_ptr<OESubSearch>,string> > sub_searches;
   QString smarts_list;
   build_sub_searches_from_smarts( sel_smarts , smarts_list , sub_searches );
   do_substructure_matching( sub_searches , smarts_list , true );
@@ -1044,7 +1044,7 @@ void SmiV::do_mdl_query_matching() {
     return;
   }
 
-  vector<pair<shared_ptr<OESubSearch>,string> > sub_searches;
+  vector<pair<boost::shared_ptr<OESubSearch>,string> > sub_searches;
   QString query_list;
   build_sub_searches_from_mdl_queries( sel_query , query_list , sub_searches );
   do_substructure_matching( sub_searches , query_list , true );
@@ -1052,7 +1052,7 @@ void SmiV::do_mdl_query_matching() {
 }
 
 // ****************************************************************************
-void SmiV::do_substructure_matching( vector<pair<shared_ptr<OESubSearch>,string> > &sub_searches ,
+void SmiV::do_substructure_matching( vector<pair<boost::shared_ptr<OESubSearch>,string> > &sub_searches ,
                                      const QString &list_name , bool show_non_matches ) {
 
   vector<pSmiVRec> ones_to_do = left_panel_->smiv_recs();
@@ -1114,7 +1114,7 @@ void SmiV::get_query_to_use( vector<char> &sel_query ,
 // ****************************************************************************
 void SmiV::build_sub_searches_from_smarts( const vector<char> &sel_smarts ,
                                            QString &smarts_list ,
-                                           vector<pair<shared_ptr<OESubSearch>,string> > &sub_searches ) {
+                                           vector<pair<boost::shared_ptr<OESubSearch>,string> > &sub_searches ) {
 
   smarts_list = "";
   for( int i = 0 , is = sel_smarts.size() ; i < is ; ++i ) {
@@ -1138,7 +1138,7 @@ void SmiV::build_sub_searches_from_smarts( const vector<char> &sel_smarts ,
       QMessageBox::warning( this , "SMARTS Error" , e.what() );
       continue;
     }
-    sub_searches.push_back( make_pair( shared_ptr<OESubSearch>( subs ) ,
+    sub_searches.push_back( make_pair( boost::shared_ptr<OESubSearch>( subs ) ,
                                        smarts_[i].first ) );
   }
 
@@ -1147,7 +1147,7 @@ void SmiV::build_sub_searches_from_smarts( const vector<char> &sel_smarts ,
 // ****************************************************************************
 void SmiV::build_sub_searches_from_mdl_queries( const vector<char> &sel_mdl_queries ,
                                                 QString &mdl_list ,
-                                                vector<pair<shared_ptr<OESubSearch>,string> > &sub_searches ) {
+                                                vector<pair<boost::shared_ptr<OESubSearch>,string> > &sub_searches ) {
 
   mdl_list = "";
   for( int i = 0 , is = sel_mdl_queries.size() ; i < is ; ++i ) {
@@ -1170,7 +1170,7 @@ void SmiV::build_sub_searches_from_mdl_queries( const vector<char> &sel_mdl_quer
     OEReadMDLQueryFile( ims , qmol , OEMDLQueryOpts::Default );
 
     OESubSearch *subs = new OESubSearch( qmol );
-    sub_searches.push_back( make_pair( shared_ptr<OESubSearch>( subs ) ,
+    sub_searches.push_back( make_pair( boost::shared_ptr<OESubSearch>( subs ) ,
                                        mdl_queries_[i].first ) );
   }
 
@@ -1489,7 +1489,7 @@ void SmiV::search_with_core_smarts( int smarts_num ) {
   }
 
   smarts_to_use[distance( smarts_.begin() , p )] = 1;
-  vector<pair<shared_ptr<OESubSearch>,string> > sub_searches;
+  vector<pair<boost::shared_ptr<OESubSearch>,string> > sub_searches;
   QString smarts_list;
   build_sub_searches_from_smarts( smarts_to_use , smarts_list , sub_searches );
   show_all_molecules();
@@ -1508,7 +1508,7 @@ void SmiV::search_with_core_smarts( int smarts_num ) {
 void SmiV::do_rgroup_analysis_of_core_smarts() {
 
   vector<char> smarts_to_use( smarts_.size() , 1 );
-  vector<pair<shared_ptr<OESubSearch>,string> > sub_searches;
+  vector<pair<boost::shared_ptr<OESubSearch>,string> > sub_searches;
   QString smarts_list;
   build_sub_searches_from_smarts( smarts_to_use , smarts_list , sub_searches );
   vector<set<int> > rgroup_pos( smarts_.size() , set<int>() );
@@ -1542,7 +1542,7 @@ void SmiV::do_rgroup_analysis_of_core_smarts() {
 
 // ****************************************************************************
 
-void SmiV::rgroup_counts_and_strip( OEGraphMol &mol , shared_ptr<OESubSearch> &sub ,
+void SmiV::rgroup_counts_and_strip( OEGraphMol &mol , boost::shared_ptr<OESubSearch> &sub ,
                                     set<int> &rgroup_pos , set<string> &unique_rgroups ) {
 
   // just want the first match, I think.  Symmetry issues aren't of interest.
@@ -1647,7 +1647,7 @@ void SmiV::update_rgroup_position_counts( const vector<set<int> > &rgroup_pos ,
 
 // ****************************************************************************
 // when molecule and subsearch are both cores, count whether mol contains sub
-void SmiV::rgroup_core_count( OEChem::OEGraphMol &mol , boost::shared_ptr<OEChem::OESubSearch> &sub ,
+void SmiV::rgroup_core_count( OEChem::OEGraphMol &mol , boost::shared_ptr<OESubSearch> &sub ,
                               int &core_count ) {
 
   if( sub->SingleMatch( mol ) ) {
