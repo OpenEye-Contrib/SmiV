@@ -530,7 +530,7 @@ void QTMolDisplay2D::set_line_width( int new_width ) {
 
     if( Qt::LeftButton == e->button() ) {
       OEAtomBase *pa = find_nearest_atom( e->x() , e->y() );
-      if( !pa && !Qt::ControlModifier == e->modifiers() ) {
+      if( !pa && Qt::ControlModifier != e->modifiers() ) {
         sel_atoms_.clear();
       }
       if( pa ) {
